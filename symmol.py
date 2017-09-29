@@ -8,6 +8,10 @@ class SymmetricMol(object):
 		self.atoms = []
 		self.names = {}
 
+	@property
+	def size(self):
+		return len(self.atoms)
+
 	def add(self, atom):
 		"""Add an atom without guarantee of order"""
 		self.atoms.append(atom)
