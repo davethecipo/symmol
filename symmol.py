@@ -2,7 +2,7 @@ import copy
 import numpy as np
 from  numpy import pi as pi
 
-class SymmetricCollection(object):
+class SymmetricMol(object):
 	"""Build symmetric molecules"""
 	def __init__(self):
 		self.atoms = []
