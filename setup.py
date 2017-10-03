@@ -8,7 +8,7 @@ setup(name='symmol',
       author='Davide Olianas',
       author_email='admin@davideolianas.com',
       url='',
-      modules=['symmol'],
+      py_modules=['symmol'],
       install_requires=['numpy'],
       extras_require={
           'dev': [ 'Sphinx' ]
