@@ -63,6 +63,13 @@ class SymmetricMol(object):
         new_atom = Atom(atom.elem, x, -y, z)
         self.atoms.append(new_atom)
 
+    def mirror_x(self, atom_index):
+        """Atom index starts at 1"""
+        atom = self.atoms[atom_index-1]
+        x, y, z = atom.pos[:,0]
+        new_atom = Atom(atom.elem, -x, y, z)
+        self.atoms.append(new_atom)
+
     def z_rotate_duplicate(self, atom, radiant_angle):
         """Duplicate atom and rotate it around the z axis with a radiant angle"""
         new = copy.deepcopy(atom)
