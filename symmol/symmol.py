@@ -1,6 +1,17 @@
 import copy
+from functools import wraps
 import numpy as np
 from  numpy import pi as pi
+
+def _check_existing_labels(function):
+    """Raises Exception if label is already used"""
+    @wraps(function)
+    def decorated(self, *args, **kwargs):
+        if 'label' in kwargs.keys():
+            if kwargs['label'] in self.names.keys():
+                raise Exception("Atom with label {} already exists, I'm not adding it".format(label))
+        function(self, *args, **kwargs)
+    return decorated
 
 class SymmetricMol(object):
     """Build symmetric molecules"""
@@ -12,21 +23,24 @@ class SymmetricMol(object):
     def size(self):
         return len(self.atoms)
 
-    def add(self, atom):
-        """Add an atom without guarantee of order"""
-        self.atoms.append(atom)
+    def _add_label(self, label):
+        # since I always append in the last position, the position is the length - 1
+        if label:
+            self.names[label] = len(self.atoms)-1 
 
+    @_check_existing_labels
+    def add(self, atom, label=None):
+        """Add an atom"""
+        self.atoms.append(atom)
+        self._add_label(label)
+
+    @_check_existing_labels
     def addTo(self, atom, new_atom, z_radiant_angle=0, label=None):
         new_atom.z_rotate(z_radiant_angle)
         new_pos = new_atom.pos +  atom.pos
         new_atom.pos = new_pos
         self.atoms.append(new_atom)
-        if label:
-            if label not in self.names.keys():
-                self.names[label] = len(self.atoms)-1 # since I always append in the last
-                # position, the position is the length - 1
-            else:
-                raise Exception("Atom with label {} already exists, I'm not adding it".format(label))
+        self._add_label(label)
 
     def addToAtomNumber(self, integer, new_atom, z_radiant_angle=0, label=None):
         """integer starts counting from 1"""
